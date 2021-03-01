@@ -12,8 +12,17 @@ import lpmi.potherat.promo2021.swapiapp.data.sw.People;
 
 public class CharactersActivity extends AppCompatActivity {
 
+    /**
+     * Liste de données en dur pour tests
+     */
     ArrayList<People> peopleArrayList;
+    /**
+     * L'adapter qui sera affecté à notre recyclerview
+     */
     CharactersAdapter charactersAdapter;
+    /**
+     * Le Recyclerview, en charge d'afficher la liste des éléments.
+     */
     RecyclerView lstCharacters;
 
     @Override
