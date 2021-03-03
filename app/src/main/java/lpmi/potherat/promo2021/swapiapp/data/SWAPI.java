@@ -9,10 +9,10 @@ import retrofit2.http.Path;
 
 public interface SWAPI {
 
-    @GET("/people/")
+    @GET("/api/people/")
     Call<List<People>> listPeople();
 
-    @GET("/people/{id}/")
-    Call<People> listPeople(@Path("id") Integer id);
+    @GET("/api/people/{id}/")
+    Call<People> getOnePeople(@Path("id") Integer id);
 
 }

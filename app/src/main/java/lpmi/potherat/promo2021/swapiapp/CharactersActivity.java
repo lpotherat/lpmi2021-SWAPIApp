@@ -5,10 +5,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 
+import lpmi.potherat.promo2021.swapiapp.data.SWAPI;
 import lpmi.potherat.promo2021.swapiapp.data.sw.People;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CharactersActivity extends AppCompatActivity {
 
@@ -58,6 +65,39 @@ public class CharactersActivity extends AppCompatActivity {
         //Affectation de notre adapter à la liste
         lstCharacters.setAdapter(charactersAdapter);
 
+
+        // ------
+        // Récupération de la liste des personnages depuis l'API
+        Retrofit retrofit = new Retrofit.Builder()
+                // L'url de base des endpoints de l'api
+                .baseUrl("https://swapi.dev/")
+                // Le converter à utiliser pour convertir les données JSON en objets du modèle
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        //Création du service SWAPI
+        SWAPI service = retrofit.create(SWAPI.class);
+
+        Call<People> onePeople = service.getOnePeople(1);
+        onePeople.enqueue(new Callback<People>() {
+            @Override
+            public void onResponse(Call<People> call, Response<People> response) {
+                if(response.isSuccessful()){
+                    People people = response.body();
+                    peopleArrayList.add(people);
+
+                    //On notifie l'adapter de notre recyclerview que les données ont changé pour
+                    //qu'il s'actualise
+                    charactersAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<People> call, Throwable t) {
+                Log.e("NETWORK","Erreur réseau : " + Log.getStackTraceString(t));
+            }
+        });
+
+        // ------
 
 
     }
